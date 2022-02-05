@@ -4,7 +4,7 @@
 
     class DBConnector {
         
-        private $db_connection = null;
+        private static $db_connection = null;
 
         private function __construct() {
             
@@ -15,16 +15,18 @@
             $port = getenv("DB_PORT");
 
             try {
-                $this->db_connection = new \PDO("mysql:host=$host;port=$port;dbname=$dbname;", $username, $password);
+                self::$db_connection = new \PDO("mysql:host=$host;port=$port;dbname=$dbname;", $username, $password);
             } catch (\PDOException $e) {
-                $this->db_connection = $e->getMessage();
+                self::$db_connection = $e->getMessage();
             }
 
         }
 
         public static function get_connection() {
-            $con = new DBConnector();
-            return $con->db_connection;
+            if(self::$db_connection == null) {
+                new DBConnector();   
+            }
+            return self::$db_connection;
         }
 
     }
