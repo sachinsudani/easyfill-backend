@@ -40,6 +40,9 @@ class CreateUserV1 {
 
                 CreateUserV1::$lastInsertedUser = json_encode($result);
 
+                header(HttpStatusCode::CREATED);
+                exit();
+                
             } catch(\PDOException $ex) {
                 if(str_contains($ex->getMessage(), "Duplicate entry")) {
                     header(HttpStatusCode::CONFLICT);
