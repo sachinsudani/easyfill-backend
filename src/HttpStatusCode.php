@@ -8,4 +8,5 @@ class HttpStatusCode {
     const BAD_REQUEST = "HTTP/1.1 400 Bad Request";
     const CONFLICT = "HTTP/1.1 409 Conflict";
     const DELETE = "HTTP/1.1 204 No Content";
+    const CREATED = "HTTP/1.1 201 Created";
 }

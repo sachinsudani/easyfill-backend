@@ -1,23 +1,28 @@
 <?php
 
-namespace src\services;
+namespace src\services\user;
 
 use Src\db\DBConnector;
-use Src\Helper\KeyChecker;
-use Src\Keys;
+use Src\Helper\JsonValidator;
+use Src\schema\AllSchemas;
 use Src\HttpStatusCode;
 
-class CreateUserV1 {
-    private $user;
-    public static $lastInsertedUser;
+class UpdateUserV1 {
+    private $user; 
+    public static $lastUpdatedUser;
 
-    public function __construct($json){
-        $this->user = json_decode($json, true);
-        if(keyChecker::validate(keys::$user, $this->user)) {
+    public function __construct($id, $json){
+        $this->user = JsonValidator::pretify($json, AllSchemas::$user);
+        if(JsonValidator::validate($this->user, AllSchemas::$user)) {
             
             $connection = DBConnector::get_connection();
-            $query = "INSERT INTO `user` (`username`, `password`, `email`, `contact_no`, `dob`) 
-            VALUES (:username, :password, :email, :contact_no, :dob)";
+            $query = "UPDATE `user` SET 
+                `username` = :username, 
+                `password` = :password, 
+                `email` = :email, 
+                `contact_no` = :contact_no, 
+                `dob` = :dob
+            WHERE ID = :id"; 
 
             try {
                 $statement = $connection->prepare($query);
@@ -27,18 +32,18 @@ class CreateUserV1 {
                         'password' => $this->user["password"],
                         'email' => $this->user["email"],
                         'contact_no' => isset($this->user["contact_no"]) ? $this->user["contact_no"] : "",
-                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : ""
+                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : "",
+                        'id' => $id
                     )
                 );
-                $inserted_user_id = $connection->lastInsertId();
                 
                 $user = "SELECT `id`, `username`, `password`, `contact_no`, `dob` FROM `user` WHERE id = :id";
 
                 $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $inserted_user_id));
+                $userStatement->execute(array('id' => $id));
                 $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
 
-                CreateUserV1::$lastInsertedUser = json_encode($result);
+                UpdateUserV1::$lastUpdatedUser = json_encode($result);
 
                 header(HttpStatusCode::CREATED);
                 exit();
