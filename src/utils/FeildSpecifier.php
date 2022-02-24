@@ -1,6 +1,6 @@
 <?php
 
-namespace src\helper;
+namespace src\utils;
 
 class FeildSpecifier {
     public function __construct(

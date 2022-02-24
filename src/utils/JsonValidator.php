@@ -1,6 +1,6 @@
 <?php
 
-namespace src\helper;
+namespace src\utils;
 use Src\HttpStatusCode;
 
 class JsonValidator {
@@ -17,33 +17,38 @@ class JsonValidator {
             if($feildSpecifier->optional && !isset($jsonArray[$feild])) continue;
 
             if(!$feildSpecifier->optional && !isset($jsonArray[$feild])) {
+                echo '{"error": "'. $feild.' is required."}';
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }
-
+            
             if($feildSpecifier->regex != "") {
                 if($feild == "email") {
                     if(!filter_var($jsonArray[$feild], FILTER_VALIDATE_EMAIL)) {
+                        echo '{"error": "'. $feild .' is Invalid."}';
                         header(HttpStatusCode::BAD_REQUEST);
                         exit();
                     }
                 } else {
                     if(!preg_match($feildSpecifier->regex, $jsonArray[$feild])) {
+                        echo '{"error": "'. $feild .' is Invalid."}';
                         header(HttpStatusCode::BAD_REQUEST);
                         exit();
                     }
                 }
             }
-
+            
             if($feildSpecifier->length != 0) {
                 if(strlen($jsonArray[$feild]) > $feildSpecifier->length){
+                    echo '{"error": "'. $feild .' is too long."}';
                     header(HttpStatusCode::BAD_REQUEST);
                     exit();
                 }
             }
-
+            
             if($feildSpecifier->max != -1 && $feildSpecifier->min != -1) {
                 if(!(strlen($jsonArray[$feild]) >= $feildSpecifier->min && strlen($jsonArray[$feild]) <= $feildSpecifier->max)) {
+                    echo '{"error": "'. $feild .' is not valid."}';
                     header(HttpStatusCode::BAD_REQUEST);
                     exit();
                 }

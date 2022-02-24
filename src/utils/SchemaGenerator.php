@@ -1,7 +1,7 @@
 <?php
 
-namespace src\helper;
-use Src\Helper\FeildSpecifier;
+namespace src\utils;
+use Src\utils\FeildSpecifier;
 
 class SchemaGenerator {
     public function __construct(public array $feilds)

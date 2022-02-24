@@ -3,7 +3,7 @@
 namespace src\services\user;
 
 use Src\db\DBConnector;
-use Src\Helper\JsonValidator;
+use Src\utils\JsonValidator;
 use Src\schema\AllSchemas;
 use Src\HttpStatusCode;
 
@@ -16,15 +16,15 @@ class CreateUserV1 {
         if(JsonValidator::validate($this->user, AllSchemas::$user)) {
             
             $connection = DBConnector::get_connection();
-            $query = "INSERT INTO `user` (`username`, `password`, `email`, `contact_no`, `dob`) 
-            VALUES (:username, :password, :email, :contact_no, :dob)";
+            $query = 'INSERT INTO "user" ("username", "password", "email", "contact_no", "dob") 
+            VALUES (:username, :password, :email, :contact_no, :dob)';
 
             try {
                 $statement = $connection->prepare($query);
                 $statement->execute(
                     array(
                         'username' => $this->user["username"],
-                        'password' => $this->user["password"],
+                        'password' => password_hash($this->user["password"], PASSWORD_BCRYPT),
                         'email' => $this->user["email"],
                         'contact_no' => isset($this->user["contact_no"]) ? $this->user["contact_no"] : "",
                         'dob' => isset($this->user["dob"]) ? $this->user["dob"] : ""
@@ -32,7 +32,7 @@ class CreateUserV1 {
                 );
                 $inserted_user_id = $connection->lastInsertId();
                 
-                $user = "SELECT `id`, `username`, `password`, `contact_no`, `dob` FROM `user` WHERE id = :id";
+                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
 
                 $userStatement = $connection->prepare($user);
                 $userStatement->execute(array('id' => $inserted_user_id));
@@ -41,13 +41,13 @@ class CreateUserV1 {
                 CreateUserV1::$lastInsertedUser = json_encode($result);
 
                 header(HttpStatusCode::CREATED);
-                exit();
                 
             } catch(\PDOException $ex) {
-                if(str_contains($ex->getMessage(), "Duplicate entry")) {
+                if(str_contains($ex->getMessage(), "duplicate key")) {
                     header(HttpStatusCode::CONFLICT);
                     exit();
                 }
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }

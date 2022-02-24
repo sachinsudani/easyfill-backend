@@ -5,7 +5,7 @@ $userSchema = array(
     "password" => array("length" => 100),
     "email" => array(
         "length" => 255, 
-        "regex" => "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/"
+        "regex" => "[Email Regex]"
     ),
     "contact_no" => array(
         "length" => 10, 
