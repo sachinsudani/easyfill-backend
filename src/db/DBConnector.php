@@ -15,7 +15,7 @@
             $port = getenv("DB_PORT");
 
             try {
-                self::$db_connection = new \PDO("pgsql:host=$host;dbname=$dbname;", $username, $password);
+                self::$db_connection = new \PDO("pgsql:host=$host;port=$port;dbname=$dbname;", $username, $password);
             } catch (\PDOException $e) {
                 self::$db_connection = $e->getMessage();
             }
@@ -30,5 +30,3 @@
         }
 
     }
-
-?>
