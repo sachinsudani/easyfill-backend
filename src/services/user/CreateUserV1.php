@@ -27,7 +27,7 @@ class CreateUserV1 {
                         'password' => password_hash($this->user["password"], PASSWORD_BCRYPT),
                         'email' => $this->user["email"],
                         'contact_no' => isset($this->user["contact_no"]) ? $this->user["contact_no"] : "",
-                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : ""
+                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : null
                     )
                 );
                 $inserted_user_id = $connection->lastInsertId();

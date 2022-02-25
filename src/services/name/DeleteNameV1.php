@@ -1,29 +1,29 @@
 <?php
 
-namespace src\services\user;
+namespace src\services\name;
 
 use Src\db\DBConnector;
 use Src\utils\Validator;
 use Src\Schema;
 use Src\HttpStatusCode;
 
-class DeleteUserV1 {
-    private $userId;
+class DeleteNameV1 {
+    private $nameId;
 
     public function __construct($id){
-        $this->userId = $id;
-        if(isset($this->userId)) {
+        $this->nameId = $id;
+        if(isset($this->nameId)) {
             
             $connection = DBConnector::get_connection();
-            $query = 'DELETE FROM "user" WHERE id = :id;';
+            $query = 'DELETE FROM "name" WHERE id = :id;';
 
             try {
                 
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
+                $name = 'SELECT "id", "firstname", "lastname", "middlename", "fullname" FROM "name" WHERE id = :id';
 
-                $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $this->userId["id"]));
-                $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
+                $nameStatement = $connection->prepare($name);
+                $nameStatement->execute(array('id' => $this->nameId));
+                $result = $nameStatement->fetch(\PDO::FETCH_ASSOC);
 
                 if(!$result) {
                     header(HttpStatusCode::NOT_FOUND);
@@ -31,7 +31,7 @@ class DeleteUserV1 {
                 }
 
                 $statement = $connection->prepare($query);
-                $statement->execute(array('id' => $this->userId["id"]));
+                $statement->execute(array('id' => $this->nameId));
 
                 header(HttpStatusCode::DELETE);
                 

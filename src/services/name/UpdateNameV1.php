@@ -1,29 +1,29 @@
 <?php
 
-namespace src\services\user;
+namespace src\services\name;
 
 use Src\db\DBConnector;
 use Src\utils\JsonValidator;
 use Src\schema\AllSchemas;
 use Src\HttpStatusCode;
 
-class UpdateUserV1 {
-    private $user; 
-    public static $lastUpdatedUser;
+class UpdateNameV1 {
+    private $name; 
+    public static $lastUpdatedname;
 
     public function __construct($id, $json){
-        $this->user = JsonValidator::pretify($json, AllSchemas::$userUpdate);
+        $this->name = JsonValidator::pretify($json, AllSchemas::$nameUpdate);
         
-        if(JsonValidator::validate($this->user, AllSchemas::$userUpdate)) {
+        if(JsonValidator::validate($this->name, AllSchemas::$nameUpdate)) {
             
-            if(!(count($this->user) >= 1)) {
+            if(!(count($this->name) >= 1)) {
                 exit();
             }
             
-            $query = 'UPDATE "user" SET ';
-            $lastelement = end($this->user);
+            $query = 'UPDATE "name" SET ';
+            $lastelement = end($this->name);
             
-            foreach ($this->user as $key => $value) {
+            foreach ($this->name as $key => $value) {
                 if($value == $lastelement) {
                     $query = $query . '"'. $key . '" = :' . $key;
                 }
@@ -33,22 +33,21 @@ class UpdateUserV1 {
             }
             
             $query = $query . ' WHERE "id" = :id';
+            $this->name["id"] = $id;
             
-            $this->user["id"] = $id;
-            $this->user["password"] = password_hash($this->user["password"], PASSWORD_BCRYPT);
             $connection = DBConnector::get_connection();
-            
+
             try {
                 $statement = $connection->prepare($query);
-                $statement->execute($this->user);
+                $statement->execute($this->name);
                 
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
-                
-                $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $id));
-                $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
+                $name = 'SELECT "firstname", "lastname", "middlename", "fullname" FROM "name" WHERE id = :id';
 
-                UpdateUserV1::$lastUpdatedUser = json_encode($result);
+                $nameStatement = $connection->prepare($name);
+                $nameStatement->execute(array('id' => $id));
+                $result = $nameStatement->fetch(\PDO::FETCH_ASSOC);
+
+                UpdateNameV1::$lastUpdatedname = json_encode($result);
 
                 header(HttpStatusCode::CREATED);
                 
