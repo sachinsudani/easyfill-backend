@@ -96,4 +96,3 @@
         $token = $addToken->getToken();
         echo $token;
     }, auth: false);
-    
