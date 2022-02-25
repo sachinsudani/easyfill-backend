@@ -10,6 +10,7 @@ use Src\services\user\DeleteUserV1;
 use Src\services\user\LoginUserV1;
 
 use Src\services\address\CreateAddressV1;
+use Src\services\address\DeleteAddressV1;
 
 use Src\services\token\CreateTokenV1;
 
@@ -44,12 +45,11 @@ $route->route("PUT", "/user/[:id]", function ($id, $is_authenticate) {
     echo UpdateUserV1::$lastUpdatedUser;
 });
 
-$route->route("DELETE", "/user/[:id]", function ($is_authenticate) {
+$route->route("DELETE", "/user/[:id]", function ($id, $is_authenticate) {
     if (!$is_authenticate)
         exit();
 
     $user = new DeleteUserV1($id);
-    echo DeleteUserV1::$lastDeletedUser;
 });
 
 //routes for address start
@@ -60,6 +60,13 @@ $route->route("POST", "/address", function ($is_authenticate) {
 
     $address = new CreateAddressV1(file_get_contents('php://input'));
     echo CreateAddressV1::$lastInsertedAddress;
+}, auth: false);
+
+$route->route("DELETE", "/address/[:id]", function ($id, $is_authenticate) {
+    if (!$is_authenticate)
+        exit();
+
+    $address = new DeleteAddressV1($id);
 }, auth: false);
 
 //routes for address end

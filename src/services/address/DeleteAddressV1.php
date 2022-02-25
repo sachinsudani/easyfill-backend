@@ -1,45 +1,43 @@
 <?php
 
-namespace src\services;
+namespace src\services\address;
 
 use Src\db\DBConnector;
-use Src\utils\Validator;
-use Src\Schema;
 use Src\HttpStatusCode;
 
-class DeleteUserV1 {
-    private $userId;
+class DeleteAddressV1
+{
+    private $addressId;
 
-    public function __construct($id){
-        $this->userId = $id;
-        if(isset($this->userId)) {
-            
+    public function __construct($id)
+    {
+        $this->addressId = $id;
+        if (isset($this->addressId)) {
+
             $connection = DBConnector::get_connection();
-            $query = 'DELETE FROM "user" WHERE id = :id;';
+            $query = 'DELETE FROM "address" WHERE id = :id;';
 
             try {
-                
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
 
-                $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $this->userId["id"]));
-                $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
+                $address = 'SELECT * FROM "address" WHERE id = :id';
 
-                if(!$result) {
+                $addressStatement = $connection->prepare($address);
+                $addressStatement->execute(array('id' => $this->addressId));
+                $result = $addressStatement->fetch(\PDO::FETCH_ASSOC);
+
+                if (!$result) {
                     header(HttpStatusCode::NOT_FOUND);
                     exit();
                 }
 
                 $statement = $connection->prepare($query);
-                $statement->execute(array('id' => $this->userId["id"]));
+                $statement->execute(array('id' => $this->addressId));
 
                 header(HttpStatusCode::DELETE);
-                
-            } catch(\PDOException $ex) {
+            } catch (\PDOException $ex) {
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }
-
         }
     }
 }
