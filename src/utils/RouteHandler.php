@@ -10,7 +10,7 @@ class RouteHandler {
     
     public function __construct() {
         $this->requestMethod = $_SERVER["REQUEST_METHOD"];
-        $this->route = "/" . explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), 3)[2];
+        $this->route = "/" . explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), 2)[1];
     }
     
     public function route($requestMethod, $route, $callback, $auth = true) {
