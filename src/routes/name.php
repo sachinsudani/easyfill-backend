@@ -71,3 +71,7 @@ $route->route("DELETE", "/user/name", function($authenticate){
         new DeleteNameV1($nameId);
     }
 });
+
+if(!($route->matchRoute() >= 1)) {
+    $isNotFound = true;
+}

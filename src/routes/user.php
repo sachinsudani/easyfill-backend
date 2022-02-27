@@ -24,6 +24,7 @@ use Src\services\parent\DeleteParentV1;
 
 use Src\services\parent\UpdateParentV1;
 
+$isNotFound = false;
 $route = new RouteHandler();
 
 $route->route("GET", "/user/me", function($authenticate){
@@ -166,3 +167,7 @@ $route->route("POST", "/user/logout", function($authenticate){
     }
 
 });
+
+if(!($route->matchRoute() >= 1)) {
+    $isNotFound = true;
+}

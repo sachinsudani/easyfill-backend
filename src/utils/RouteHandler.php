@@ -6,6 +6,7 @@ use Src\utils\UserAuth;
 class RouteHandler {
     private $requestMethod;
     public $route;
+    private static $routeCount = 0;
     private static $authRoute = array();
     
     public function __construct() {
@@ -21,22 +22,13 @@ class RouteHandler {
         if($requestMethod == $this->requestMethod) {
             if($this->route == $route) {
                 $callback(self::authenticate($route, $auth));
-            }
-
-            if(str_contains($route, "[:id]")) {
-                $routeArray = explode("/", $route);
-                $requestRouteArray = explode("/", $this->route);
-                $routeId = (int) $requestRouteArray[count($requestRouteArray) - 1];
-
-                array_pop($routeArray);
-                array_push($routeArray, $routeId);
-
-                $actualRoute = implode("/",$routeArray);
-                if(strcmp($this->route, $actualRoute) == 0) {
-                    $callback($routeId,self::authenticate($route, $auth));
-                }
+                RouteHandler::$routeCount ++;
             }
         }
+    }
+
+    public function matchRoute() {
+        return RouteHandler::$routeCount;
     }
 
     public function authenticate($route, $auth) {

@@ -142,3 +142,7 @@ $route->route("DELETE", "/user/parent", function($authenticate){
     header(HttpStatusCode::NOT_FOUND);
     exit();
 });
+
+if(!($route->matchRoute() >= 1)) {
+    $isNotFound = true;
+}

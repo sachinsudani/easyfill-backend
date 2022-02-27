@@ -38,9 +38,8 @@ class UserAuth
     // Validates a token
     public static function validateJWT()
     {
-        print_r(getallheaders());
-        if (isset(getallheaders()['authorization'])) {
-            $authorizationHeader = explode(" ", getallheaders()['authorization']);
+        if (isset(getallheaders()['Authorization'])) {
+            $authorizationHeader = explode(" ", getallheaders()['Authorization']);
             if (!(isset($authorizationHeader[1]) && count($authorizationHeader) == 2)) {
                 header("HTTP/1.1 401 Unauthorised");
                 exit();
