@@ -38,7 +38,7 @@ class UserAuth
     // Validates a token
     public static function validateJWT()
     {
-        print_r(getallheaders()['authorization']);
+        print_r(getallheaders());
         if (isset(getallheaders()['authorization'])) {
             $authorizationHeader = explode(" ", getallheaders()['authorization']);
             if (!(isset($authorizationHeader[1]) && count($authorizationHeader) == 2)) {
