@@ -22,7 +22,7 @@ class DeleteUserV1
                 $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
 
                 $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $this->userId["id"]));
+                $userStatement->execute(array('id' => $this->userId));
                 $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
 
                 if (!$result) {
@@ -31,10 +31,11 @@ class DeleteUserV1
                 }
 
                 $statement = $connection->prepare($query);
-                $statement->execute(array('id' => $this->userId["id"]));
+                $statement->execute(array('id' => $this->userId));
 
                 header(HttpStatusCode::DELETE);
             } catch (\PDOException $ex) {
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }

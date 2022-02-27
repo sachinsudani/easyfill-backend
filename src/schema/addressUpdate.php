@@ -1,6 +1,6 @@
 <?php
 
-$addressSchema = array(
+$addressUpdateSchema = array(
     "street_line_1" => array("length" => 100, "optional" => true),
     "area" => array("length" => 100, "optional" => true),
     "locality" => array("length" => 100, "optional" => true),

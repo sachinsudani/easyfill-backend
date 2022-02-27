@@ -9,7 +9,7 @@ use Src\HttpStatusCode;
 
 class CreateParentV1 {
     private $parent; 
-    public static $lastInsertedparent;
+    public static $lastInsertedParent;
 
     public function __construct($id, $json){
         $this->parent = JsonValidator::pretify($json, AllSchemas::$parent);
@@ -35,7 +35,7 @@ class CreateParentV1 {
                 $parentStatement->execute(array('id' => $inserted_parent_id));
                 $result = $parentStatement->fetch(\PDO::FETCH_ASSOC);
 
-                CreateparentV1::$lastInsertedparent = json_encode($result);
+                CreateparentV1::$lastInsertedParent = json_encode($result);
 
                 header(HttpStatusCode::CREATED);
                 

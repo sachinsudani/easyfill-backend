@@ -36,6 +36,7 @@ class DeleteNameV1 {
                 header(HttpStatusCode::DELETE);
                 
             } catch(\PDOException $ex) {
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }

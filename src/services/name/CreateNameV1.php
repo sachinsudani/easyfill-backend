@@ -31,7 +31,8 @@ class CreateNameV1 {
                 );
                 $inserted_name_id = $connection->lastInsertId();
                 
-                $name = 'SELECT "id", "firstname", "lastname", "middlename", "fullname" FROM "name" WHERE id = :id';
+                $name = 'SELECT "id", "firstname", "lastname", "middlename", "fullname", "created_at", "updated_at"
+                FROM "name" WHERE ID = :id';
 
                 $nameStatement = $connection->prepare($name);
                 $nameStatement->execute(array('id' => $inserted_name_id));

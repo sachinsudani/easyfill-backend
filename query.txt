@@ -1,6 +1,71 @@
+CREATE OR REPLACE FUNCTION update_changetimestamp_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = now(); 
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
 
-create table "user"("id" serial not null primary key,"username" varchar(100) not null unique,"password" varchar(255) not null, "email" varchar(255) not null unique, "contact_no" varchar(10), "dob" date, "created_at" timestamp default now(), "updated_at" timestamp default now());
+CREATE TABLE "name" (
+	"id" SERIAL PRIMARY KEY,
+	"firstname" VARCHAR(65),
+	"middlename" VARCHAR(65),
+	"lastname" VARCHAR(65),
+	"fullname" VARCHAR(195),
+	"created_at" TIMESTAMP DEFAULT now(),
+	"updated_at" TIMESTAMP DEFAULT now()
+);
 
-create table "token"("id" serial not null primary key,"jwt" varchar(255) unique not null, "user_id" int);
+CREATE TABLE "address" (
+	"id" SERIAL PRIMARY KEY,
+	"street_line_1" VARCHAR(100),
+	"area" VARCHAR(100),
+	"locality" VARCHAR(100),
+	"house_no" VARCHAR(100),
+	"post_office" VARCHAR(100),
+	"state" VARCHAR(100),
+	"district" VARCHAR(100),
+	"sub_district" VARCHAR(100),
+	"city" VARCHAR(100),
+	"pincode" VARCHAR(6),
+	"created_at" TIMESTAMP DEFAULT now(),
+	"updated_at" TIMESTAMP DEFAULT now()
+);
 
-create table address("id" serial not null primary key,"street_line_1" varchar(100),"area" varchar(100),"locality" varchar(100),"house_no" varchar(100),"post_office" varchar(100),"state" varchar(100),"district" varchar(100),"sub_district" varchar(100),"city" varchar(100),"pincode" varchar(6));
+CREATE TABLE "parent" (
+	"id" SERIAL PRIMARY KEY,
+	"relation" VARCHAR(8),
+	"name_id" integer UNIQUE REFERENCES name(id) ON UPDATE CASCADE,
+	"created_at" TIMESTAMP DEFAULT now(),
+	"updated_at" TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE "user" (
+	"id" SERIAL PRIMARY KEY, 
+	"username" VARCHAR(100) UNIQUE NOT NULL,
+	"password" VARCHAR(255) NOT NULL,
+	"email" VARCHAR(100) UNIQUE NOT NULL,
+	"contact_no" VARCHAR(10),
+	"dob" VARCHAR(11),
+	"gender" VARCHAR(1),
+	"image" BYTEA,
+	"name_id" integer UNIQUE REFERENCES name(id) ON UPDATE CASCADE,
+	"address_id" integer UNIQUE REFERENCES address(id) ON UPDATE CASCADE,
+	"parent_id" integer UNIQUE REFERENCES parent(id) ON UPDATE CASCADE,
+	"created_at" TIMESTAMP DEFAULT now(),
+	"updated_at" TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE "token" (
+	"id" SERIAL PRIMARY KEY, 
+	"jwt" VARCHAR(255) UNIQUE, 
+	"user_id" integer UNIQUE REFERENCES "user"(id) ON UPDATE CASCADE,
+	"created_at" TIMESTAMP DEFAULT now(),
+	"updated_at" TIMESTAMP DEFAULT now()
+);
+
+CREATE TRIGGER update_user_updatedat BEFORE UPDATE ON "user" FOR EACH ROW EXECUTE PROCEDURE update_changetimestamp_column();
+CREATE TRIGGER update_address_updatedat BEFORE UPDATE ON "address" FOR EACH ROW EXECUTE PROCEDURE update_changetimestamp_column();
+CREATE TRIGGER update_name_updatedat BEFORE UPDATE ON "name" FOR EACH ROW EXECUTE PROCEDURE update_changetimestamp_column();
+CREATE TRIGGER update_parent_updatedat BEFORE UPDATE ON "parent" FOR EACH ROW EXECUTE PROCEDURE update_changetimestamp_column();
+CREATE TRIGGER update_token_updatedat BEFORE UPDATE ON "token" FOR EACH ROW EXECUTE PROCEDURE update_changetimestamp_column();

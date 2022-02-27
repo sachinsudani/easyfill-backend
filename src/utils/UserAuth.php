@@ -3,6 +3,7 @@
 namespace src\utils;
 
 use Firebase\JWT\JWT;
+use Src\services\token\Token;
 
 class UserAuth
 {
@@ -45,10 +46,18 @@ class UserAuth
             }
 
             $token = $authorizationHeader[1];
+
             try {
                 $decode = JWT::decode($token, UserAuth::$key, array('HS256'));
-                UserAuth::$result['0'] = true;
-                UserAuth::$result['1'] = (array) $decode;
+
+                $token = new Token($decode->id);
+                if($token->isTokenInDatabase()) {
+                    UserAuth::$result['0'] = true;
+                    UserAuth::$result['1'] = (array) $decode;
+                } else {
+                    throw new \Exception();
+                }
+
             } catch (\Exception $ex) {
                 echo $ex->getMessage();
                 header("HTTP/1.1 401 Unauthorised");

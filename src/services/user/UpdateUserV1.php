@@ -35,14 +35,19 @@ class UpdateUserV1 {
             $query = $query . ' WHERE "id" = :id';
             
             $this->user["id"] = $id;
-            $this->user["password"] = password_hash($this->user["password"], PASSWORD_BCRYPT);
+            if(isset($this->user["password"]))
+                $this->user["password"] = password_hash($this->user["password"], PASSWORD_BCRYPT);
+            
+            if(isset($this->user["gender"]))
+                $this->user["gender"] = $this->user["gender"] == "male" ? "m" : "f";
+            
             $connection = DBConnector::get_connection();
             
             try {
                 $statement = $connection->prepare($query);
                 $statement->execute($this->user);
                 
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
+                $user = 'SELECT "id", "username", "email", "contact_no", "dob", "gender", "address_id", "name_id", "parent_id", "created_at", "updated_at" FROM "user" WHERE id = :id';
                 
                 $userStatement = $connection->prepare($user);
                 $userStatement->execute(array('id' => $id));

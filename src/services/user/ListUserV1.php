@@ -16,8 +16,8 @@ class ListUserV1 {
         if(isset($this->userId)) {
             
             $connection = DBConnector::get_connection();
-            $query = 'SELECT "id", "username", "email", "contact_no", "dob", "created_at", "updated_at"
-                FROM "user" WHERE ID = :id';
+            $query = 'SELECT "id", "username", "email", "contact_no", "dob", "gender", "address_id", "name_id", "parent_id", "created_at", "updated_at" 
+                FROM "user" WHERE id = :id';
 
             try {
                 $statement = $connection->prepare($query);

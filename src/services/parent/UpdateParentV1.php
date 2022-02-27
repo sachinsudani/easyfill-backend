@@ -9,7 +9,7 @@ use Src\HttpStatusCode;
 
 class UpdateParentV1 {
     private $parent; 
-    public static $lastUpdatedparent;
+    public static $lastUpdatedParent;
 
     public function __construct($id, $json){
         $this->parent = JsonValidator::pretify($json, AllSchemas::$parentUpdate);
@@ -47,11 +47,11 @@ class UpdateParentV1 {
                 $parentStatement->execute(array('id' => $id));
                 $result = $parentStatement->fetch(\PDO::FETCH_ASSOC);
 
-                UpdateParentV1::$lastUpdatedparent = json_encode($result);
-
+                UpdateParentV1::$lastUpdatedParent = json_encode($result);
                 header(HttpStatusCode::CREATED);
                 
             } catch(\PDOException $ex) {
+                echo $ex->getMessage();
                 if(str_contains($ex->getMessage(), "duplicate key")) {
                     header(HttpStatusCode::CONFLICT);
                     exit();

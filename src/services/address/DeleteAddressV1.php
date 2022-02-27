@@ -19,7 +19,7 @@ class DeleteAddressV1
 
             try {
 
-                $address = 'SELECT * FROM "address" WHERE id = :id';
+                $address = 'SELECT "id" FROM "address" WHERE id = :id';
 
                 $addressStatement = $connection->prepare($address);
                 $addressStatement->execute(array('id' => $this->addressId));
@@ -35,6 +35,7 @@ class DeleteAddressV1
 
                 header(HttpStatusCode::DELETE);
             } catch (\PDOException $ex) {
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }

@@ -9,7 +9,7 @@ use Src\HttpStatusCode;
 
 class UpdateNameV1 {
     private $name; 
-    public static $lastUpdatedname;
+    public static $lastUpdatedName;
 
     public function __construct($id, $json){
         $this->name = JsonValidator::pretify($json, AllSchemas::$nameUpdate);
@@ -41,13 +41,14 @@ class UpdateNameV1 {
                 $statement = $connection->prepare($query);
                 $statement->execute($this->name);
                 
-                $name = 'SELECT "firstname", "lastname", "middlename", "fullname" FROM "name" WHERE id = :id';
+                $name = 'SELECT "id", "firstname", "lastname", "middlename", "fullname", "created_at", "updated_at"
+                FROM "name" WHERE ID = :id';
 
                 $nameStatement = $connection->prepare($name);
                 $nameStatement->execute(array('id' => $id));
                 $result = $nameStatement->fetch(\PDO::FETCH_ASSOC);
 
-                UpdateNameV1::$lastUpdatedname = json_encode($result);
+                UpdateNameV1::$lastUpdatedName = json_encode($result);
 
                 header(HttpStatusCode::CREATED);
                 

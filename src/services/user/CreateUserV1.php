@@ -18,8 +18,8 @@ class CreateUserV1
         if (JsonValidator::validate($this->user, AllSchemas::$user)) {
 
             $connection = DBConnector::get_connection();
-            $query = 'INSERT INTO "user" ("username", "password", "email", "contact_no", "dob") 
-            VALUES (:username, :password, :email, :contact_no, :dob)';
+            $query = 'INSERT INTO "user" ("username", "password", "email", "contact_no", "dob", "gender") 
+            VALUES (:username, :password, :email, :contact_no, :dob, :gender)';
 
             try {
                 $statement = $connection->prepare($query);
@@ -29,12 +29,13 @@ class CreateUserV1
                         'password' => password_hash($this->user["password"], PASSWORD_BCRYPT),
                         'email' => $this->user["email"],
                         'contact_no' => isset($this->user["contact_no"]) ? $this->user["contact_no"] : "",
-                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : null
+                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : null,
+                        'gender' => isset($this->user["gender"]) ? ($this->user["gender"] == "male") ? "m" : "f" : null
                     )
                 );
                 $inserted_user_id = $connection->lastInsertId();
 
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
+                $user = 'SELECT "id", "username", "email", "contact_no", "dob", "gender", "address_id", "name_id", "parent_id", "created_at", "updated_at" FROM "user" WHERE id = :id';
 
                 $userStatement = $connection->prepare($user);
                 $userStatement->execute(array('id' => $inserted_user_id));

@@ -18,7 +18,6 @@ class DeleteParentV1 {
             $query = 'DELETE FROM "parent" WHERE id = :id;';
 
             try {
-                
                 $parent = 'SELECT "id", "relation", "name_id" FROM "parent" WHERE id = :id';
 
                 $parentStatement = $connection->prepare($parent);
@@ -36,6 +35,7 @@ class DeleteParentV1 {
                 header(HttpStatusCode::DELETE);
                 
             } catch(\PDOException $ex) {
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }

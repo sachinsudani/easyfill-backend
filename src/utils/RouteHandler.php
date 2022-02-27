@@ -41,13 +41,14 @@ class RouteHandler {
 
     public function authenticate($route, $auth) {
         if(!$auth) {
-            return true;
+            $result = array(true);
+            return $result;
         }
         
         if(in_array($route, RouteHandler::$authRoute)) {
             new UserAuth();
-            UserAuth::validateJWT();
-            return true;
+            $result = UserAuth::validateJWT();
+            return $result;
         }
     }
 }

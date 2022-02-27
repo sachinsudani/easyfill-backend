@@ -1,54 +1,57 @@
 <?php
 
-namespace src\services\user;
+namespace src\services\address;
 
 use Src\db\DBConnector;
 use Src\utils\JsonValidator;
 use Src\schema\AllSchemas;
 use Src\HttpStatusCode;
 
-class UpdateUserV1 {
-    private $user; 
-    public static $lastUpdatedUser;
+class UpdateAddressV1 {
+    private $address; 
+    public static $lastUpdatedAddress;
 
     public function __construct($id, $json){
-        $this->user = JsonValidator::pretify($json, AllSchemas::$user);
-        if(JsonValidator::validate($this->user, AllSchemas::$user)) {
+        $this->address = JsonValidator::pretify($json, AllSchemas::$addressUpdate);
+        
+        if(JsonValidator::validate($this->address, AllSchemas::$addressUpdate)) {
+            
+            if(!(count($this->address) >= 1)) {
+                exit();
+            }
+            
+            $query = 'UPDATE "address" SET ';
+            $lastelement = end($this->address);
+            
+            foreach ($this->address as $key => $value) {
+                if($value == $lastelement) {
+                    $query = $query . '"'. $key . '" = :' . $key;
+                }
+                else {
+                    $query = $query . '"'. $key . '" = :' . $key . ',';
+                }
+            }
+            
+            $query = $query . ' WHERE "id" = :id';
+            $this->address["id"] = $id;
             
             $connection = DBConnector::get_connection();
-            $query = 'UPDATE "user" SET 
-                "username" = :username, 
-                "password" = :password, 
-                "email" = :email, 
-                "contact_no" = :contact_no, 
-                "dob" = :dob
-            WHERE ID = :id'; 
 
             try {
                 $statement = $connection->prepare($query);
-                $statement->execute(
-                    array(
-                        'username' => $this->user["username"],
-                        'password' => $this->user["password"],
-                        'email' => $this->user["email"],
-                        'contact_no' => isset($this->user["contact_no"]) ? $this->user["contact_no"] : "",
-                        'dob' => isset($this->user["dob"]) ? $this->user["dob"] : "",
-                        'id' => $id
-                    )
-                );
+                $statement->execute($this->address);
                 
-                $user = 'SELECT "id", "username", "password", "contact_no", "dob" FROM "user" WHERE id = :id';
+                $address = 'SELECT "id", "street_line_1", "area", "locality", "house_no", "post_office", "state", "district", "sub_district", "city", "pincode", "created_at", "updated_at" FROM "address" WHERE id = :id';
 
-                $userStatement = $connection->prepare($user);
-                $userStatement->execute(array('id' => $id));
-                $result = $userStatement->fetch(\PDO::FETCH_ASSOC);
+                $addressStatement = $connection->prepare($address);
+                $addressStatement->execute(array('id' => $id));
+                $result = $addressStatement->fetch(\PDO::FETCH_ASSOC);
 
-                UpdateUserV1::$lastUpdatedUser = json_encode($result);
-
+                UpdateAddressV1::$lastUpdatedAddress = json_encode($result);
                 header(HttpStatusCode::CREATED);
-                exit();
                 
             } catch(\PDOException $ex) {
+                echo $ex->getMessage();
                 if(str_contains($ex->getMessage(), "duplicate key")) {
                     header(HttpStatusCode::CONFLICT);
                     exit();

@@ -18,5 +18,9 @@ $userSchema = array(
         "regex" => "/^(19|20)\d\d[\/.](0[1-9]|[12][0-9]|3[01])[\/.](0[1-9]|1[012])$/",
         "length" => 11, 
         "optional" => true
+    ),
+    "gender" => array(
+        "length" => 6,
+        "optional" => true
     )
 );
