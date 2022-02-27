@@ -4,15 +4,15 @@ namespace src\schema;
 
 use Src\utils\SchemaGenerator;
 
-include(__DIR__. "\address.php");
-include(__DIR__. "\addressUpdate.php");
-include(__DIR__. "\user.php");
-include(__DIR__. "\userLogin.php");
-include(__DIR__. "\userUpdate.php");
-include(__DIR__. "\\name.php");
-include(__DIR__. "\\nameUpdate.php");
-include(__DIR__. "\parent.php");
-include(__DIR__. "\parentUpdate.php");
+include(__DIR__. "/address.php");
+include(__DIR__. "/addressUpdate.php");
+include(__DIR__. "/user.php");
+include(__DIR__. "/userLogin.php");
+include(__DIR__. "/userUpdate.php");
+include(__DIR__. "/name.php");
+include(__DIR__. "/nameUpdate.php");
+include(__DIR__. "/parent.php");
+include(__DIR__. "/parentUpdate.php");
 
 class AllSchemas
 {
