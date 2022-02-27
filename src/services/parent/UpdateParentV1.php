@@ -41,7 +41,7 @@ class UpdateParentV1 {
                 $statement = $connection->prepare($query);
                 $statement->execute($this->parent);
                 
-                $parent = 'SELECT "id", "relation", "name_id" FROM "parent" WHERE id = :id';
+                $parent = 'SELECT "id", "relation", "name_id", "created_at", "updated_at" FROM "parent" WHERE id = :id';
 
                 $parentStatement = $connection->prepare($parent);
                 $parentStatement->execute(array('id' => $id));

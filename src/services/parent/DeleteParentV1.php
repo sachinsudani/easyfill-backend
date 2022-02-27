@@ -18,7 +18,7 @@ class DeleteParentV1 {
             $query = 'DELETE FROM "parent" WHERE id = :id;';
 
             try {
-                $parent = 'SELECT "id", "relation", "name_id" FROM "parent" WHERE id = :id';
+                $parent = 'SELECT "id", "relation", "name_id", "created_at", "updated_at" FROM "parent" WHERE id = :id';
 
                 $parentStatement = $connection->prepare($parent);
                 $parentStatement->execute(array('id' => $this->parentId));

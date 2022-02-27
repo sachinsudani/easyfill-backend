@@ -16,7 +16,7 @@ class ListParentV1 {
         if(isset($this->parentId)) {
             
             $connection = DBConnector::get_connection();
-            $query = 'SELECT "id", "relation", "name_id"
+            $query = 'SELECT "id", "relation", "name_id","created_at", "updated_at"
                 FROM "parent" WHERE ID = :id';
 
             try {

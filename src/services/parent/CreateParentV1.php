@@ -29,7 +29,7 @@ class CreateParentV1 {
                 );
                 $inserted_parent_id = $connection->lastInsertId();
                 
-                $parent = 'SELECT "id", "relation", "name_id" FROM "parent" WHERE id = :id';
+                $parent = 'SELECT "id", "relation", "name_id", "created_at", "updated_at" FROM "parent" WHERE id = :id';
 
                 $parentStatement = $connection->prepare($parent);
                 $parentStatement->execute(array('id' => $inserted_parent_id));
