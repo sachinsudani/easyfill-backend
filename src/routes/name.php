@@ -25,6 +25,7 @@ $route->route("GET", "/user/name", function($authenticate){
         new ListNameV1($nameId);
         echo ListNameV1::$name;
     }
+    exit();
 });
 
 $route->route("POST", "/user/name", function($authenticate){
@@ -56,6 +57,7 @@ $route->route("PUT", "/user/name", function($authenticate){
     
     $name = new UpdateNameV1($nameId, file_get_contents('php://input'));
     echo UpdateNameV1::$lastUpdatedName;
+    exit();
 });
 
 $route->route("DELETE", "/user/name", function($authenticate){
@@ -70,6 +72,7 @@ $route->route("DELETE", "/user/name", function($authenticate){
         echo UpdateUserV1::$lastUpdatedUser;
         new DeleteNameV1($nameId);
     }
+    exit();
 });
 
 if(!($route->matchRoute() >= 1)) {

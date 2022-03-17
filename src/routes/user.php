@@ -65,6 +65,7 @@ $route->route("GET", "/user/me", function($authenticate){
     }
 
     echo json_encode($userArray);
+    exit();
 });
 
 $route->route("POST", "/user", function($authenticate){
@@ -73,6 +74,7 @@ $route->route("POST", "/user", function($authenticate){
 
     $user = new CreateUserV1(file_get_contents('php://input'));
     echo CreateUserV1::$lastInsertedUser;
+    exit();
 }, auth: false);
 
 $route->route("DELETE", "/user/me", function($authenticate){
@@ -107,7 +109,7 @@ $route->route("DELETE", "/user/me", function($authenticate){
     if($token->removedToken()) {
         new DeleteUserV1($authenticate[1]['id']);
     }
-
+    exit();
 });
 
 $route->route("PUT", "/user/me", function($authenticate){
@@ -118,6 +120,7 @@ $route->route("PUT", "/user/me", function($authenticate){
 
     $user = new UpdateUserV1($authenticate[1]['id'], file_get_contents('php://input'));
     echo UpdateUserV1::$lastUpdatedUser;
+    exit();
 });
 
 $route->route("POST", "/user/avatar", function($authenticate){
@@ -126,6 +129,7 @@ $route->route("POST", "/user/avatar", function($authenticate){
 
     $data = base64_encode(file_get_contents('php://input'));
     $user = new CreateAvatarV1($authenticate[1]['id'], $data);
+    exit();
 });
 
 $route->route("GET", "/user/avatar", function($authenticate){
@@ -135,6 +139,7 @@ $route->route("GET", "/user/avatar", function($authenticate){
     header("Content-Type: image/png");
     $user = new GetAvatarV1($authenticate[1]['id']);
     echo base64_decode(GetAvatarV1::$user);
+    exit();
 });
 
 $route->route("POST", "/user/login", function($is_authenticate){
@@ -155,6 +160,7 @@ $route->route("POST", "/user/login", function($is_authenticate){
     $token = $login->getToken();
 
     echo $token;
+    exit();
 }, auth: false);
 
 $route->route("POST", "/user/logout", function($authenticate){
@@ -167,7 +173,7 @@ $route->route("POST", "/user/logout", function($authenticate){
     if($is_logout) {
         echo '{"success": "logout successfull"}';
     }
-
+    exit();
 });
 
 if(!($route->matchRoute() >= 1)) {
