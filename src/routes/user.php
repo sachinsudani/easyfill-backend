@@ -113,9 +113,7 @@ $route->route("DELETE", "/user/me", function($authenticate){
 $route->route("PUT", "/user/me", function($authenticate){
     if(!$authenticate[0]) 
         exit();
-
-    echo file_get_contents('php://input');
-
+        
     $user = new UpdateUserV1($authenticate[1]['id'], file_get_contents('php://input'));
     echo UpdateUserV1::$lastUpdatedUser;
 });
