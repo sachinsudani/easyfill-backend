@@ -39,6 +39,7 @@ $route->route("GET", "/user/parent", function($authenticate){
         }
         echo json_encode($parentArray);
     }
+    exit();
 });
 
 $route->route("POST", "/user/parent", function($authenticate){
@@ -117,7 +118,7 @@ $route->route("PUT", "/user/parent", function($authenticate){
         unset($parentArray["name_id"]);
     }
     echo json_encode($parentArray);
-
+    exit();
 });
 
 $route->route("DELETE", "/user/parent", function($authenticate){
