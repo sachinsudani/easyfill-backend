@@ -34,6 +34,7 @@ class UpdateNameV1 {
             
             $query = $query . ' WHERE "id" = :id';
             $this->name["id"] = $id;
+            echo $query;
             
             $connection = DBConnector::get_connection();
 
