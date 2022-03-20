@@ -25,10 +25,10 @@ class UpdateNameV1 {
             
             foreach ($this->name as $key => $value) {
                 if($value == $lastelement) {
-                    $query = $query . '"'. $key . '" = :' . $key;
+                    $query = $query . '"'. $key . '" = :' . $key . ',';
                 }
                 else {
-                    $query = $query . '"'. $key . '" = :' . $key . ',';
+                    $query = $query . '"'. $key . '" = :' . $key;
                 }
             }
             
