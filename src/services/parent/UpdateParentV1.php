@@ -56,7 +56,7 @@ class UpdateParentV1 {
                     header(HttpStatusCode::CONFLICT);
                     exit();
                 }
-                echo $ex->getMessage()
+                echo $ex->getMessage();
                 header(HttpStatusCode::BAD_REQUEST);
                 exit();
             }
