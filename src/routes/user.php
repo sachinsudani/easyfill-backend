@@ -134,7 +134,6 @@ $route->route("GET", "/user/avatar", function($authenticate){
     if(!$authenticate[0]) 
         exit();
 
-    header("Content-Type: image/png");
     $user = new GetAvatarV1($authenticate[1]['id']);
     echo base64_decode(GetAvatarV1::$user);
     exit();
