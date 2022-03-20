@@ -75,7 +75,7 @@ class JsonValidator {
 
         foreach($jsonArray as $key => $val) {
             if(in_array($key, $feilds)) {
-                trim($val);
+                trim($val, " ");
                 $pretifyJsonArray[$key] = $val;
             } 
             else {
