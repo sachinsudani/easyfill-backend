@@ -21,14 +21,15 @@ class UpdateNameV1 {
             }
             
             $query = 'UPDATE "name" SET ';
-            $lastelement = end($this->name);
+            $count = count($this->name);
             
+            $i = 0;
             foreach ($this->name as $key => $value) {
-                if($value == $lastelement) {
-                    $query = $query . '"'. $key . '" = :' . $key . ',';
+                if(++$i == $count) {
+                    $query = $query . '"'. $key . '" = :' . $key;
                 }
                 else {
-                    $query = $query . '"'. $key . '" = :' . $key;
+                    $query = $query . '"'. $key . '" = :' . $key . ',';
                 }
             }
             
